@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Guardia">
+  <meta name="theme-color" content="#1e3a5f">
+  <title>Control de Visitas</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --navy: #1e3a5f;
+      --navy-dark: #0f2340;
+      --navy-light: #2a4f82;
+      --accent: #f97316;
+      --accent-dark: #ea6c0a;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --bg: #f0f4f8;
+      --surface: #ffffff;
+      --text: #1a2535;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
+      color: white;
+      padding: 16px 20px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .header h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+    .header p { font-size: 12px; opacity: 0.7; margin-top: 1px; }
+    .badge-live {
+      background: var(--success);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .dot-live {
+      width: 7px; height: 7px;
+      background: white;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 84px;
+      z-index: 99;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px 4px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+    .tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
+
+    /* CONTENT */
+    .content { padding: 16px; max-width: 520px; margin: 0 auto; }
+
+    /* SCREEN VIEWS */
+    .view { display: none; }
+    .view.active { display: block; }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin: 20px 0 10px;
+    }
+    .section-label:first-child { margin-top: 0; }
+
+    /* CARD */
+    .card {
+      background: var(--surface);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    /* FORM */
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 15px;
+      color: var(--text);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--navy);
+    }
+    .form-group textarea { resize: none; height: 80px; }
+
+    /* AREA GRID */
+    .area-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .area-btn {
+      padding: 10px 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: white;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .area-btn.selected {
+      border-color: var(--navy);
+      background: #eef3ff;
+      color: var(--navy);
+      font-weight: 700;
+    }
+    .area-btn .area-emoji { font-size: 16px; }
+
+    /* SEND BUTTON */
+    .btn-send {
+      width: 100%;
+      padding: 16px;
+      background: var(--accent);
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 4px 16px rgba(249,115,22,0.4);
+      letter-spacing: 0.2px;
+    }
+    .btn-send:active { transform: scale(0.97); }
+    .btn-send:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; }
+
+    /* SUCCESS FLASH */
+    .success-toast {
+      position: fixed;
+      top: 20px; left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: var(--success);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 14px; font-weight: 600;
+      z-index: 999;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      white-space: nowrap;
+    }
+    .success-toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* LOG LIST */
+    .log-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .log-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+    .log-dot.pending { background: var(--accent); }
+    .log-meta { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+    .log-name { font-size: 14px; font-weight: 600; }
+    .log-area {
+      font-size: 11px; font-weight: 700;
+      background: #eef3ff; color: var(--navy);
+      padding: 2px 8px; border-radius: 20px;
+      display: inline-block; margin-top: 4px;
+    }
+
+    /* CONFIG */
+    .config-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .config-row:last-child { border-bottom: none; }
+    .config-label { font-size: 14px; font-weight: 500; }
+    .config-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .config-email {
+      font-size: 13px; color: var(--navy);
+      font-weight: 500; text-align: right;
+      max-width: 180px; word-break: break-all;
+    }
+
+    /* EMPTY STATE */
+    .empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .empty p { font-size: 14px; }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      display: flex; align-items: flex-end;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-sheet {
+      background: white;
+      width: 100%;
+      border-radius: 20px 20px 0 0;
+      padding: 20px 20px 40px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-overlay.open .modal-sheet { transform: translateY(0); }
+    .modal-handle {
+      width: 40px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+    .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .email-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .email-item:last-child { border-bottom: none; }
+    .email-item input {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 14px;
+      margin-left: 10px;
+      outline: none;
+    }
+    .email-item input:focus { border-color: var(--navy); }
+    .btn-save {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      background: var(--navy);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    /* COUNTER BADGE */
+    .tab-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent);
+      color: white;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 5px;
+      margin-left: 4px;
+      min-width: 16px; height: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="header-logo">
+      <div class="logo-icon">🛡️</div>
+      <div>
+        <h1>Control de Visitas</h1>
+        <p>Caseta de seguridad</p>
+      </div>
+    </div>
+    <div class="badge-live"><div class="dot-live"></div>EN LÍNEA</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('aviso')">📣 Avisar</button>
+  <button class="tab-btn" onclick="switchTab('historial')">📋 Historial <span class="tab-badge" id="badge-count">0</span></button>
+  <button class="tab-btn" onclick="switchTab('config')">⚙️ Config</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ── TAB: AVISAR ── -->
+  <div class="view active" id="view-aviso">
+
+    <div class="section-label">Datos del proveedor / visitante</div>
+    <div class="card">
+      <div class="form-group">
+        <label>Nombre de la empresa</label>
+        <input type="text" id="empresa" placeholder="Ej. CEMEX, DHL, etc." autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Nombre del visitante</label>
+        <input type="text" id="visitante" placeholder="Nombre completo" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label>Motivo de visita</label>
+        <select id="motivo">
+          <option value="">— Seleccionar —</option>
+          <option>Entrega de mercancía</option>
+          <option>Servicio de mantenimiento</option>
+          <option>Reunión / cita programada</option>
+          <option>Auditoría / revisión</option>
+          <option>Entrega de documentos</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="form-group" id="otro-group" style="display:none">
+        <label>Especificar motivo</label>
+        <input type="text" id="otro-motivo" placeholder="Describe el motivo">
+      </div>
+    </div>
+
+    <div class="section-label">¿A qué área va dirigido?</div>
+    <div class="area-grid" id="area-grid">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="form-group">
+      <label>Observaciones (opcional)</label>
+      <textarea id="obs" placeholder="Placas, número de empleado, urgente, etc."></textarea>
+    </div>
+
+    <button class="btn-send" id="btn-enviar" onclick="enviarAviso()">
+      🔔 AVISAR AL ÁREA
+    </button>
+
+    <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:12px;">
+      Se enviará un correo de notificación al área seleccionada
+    </p>
+  </div>
+
+  <!-- ── TAB: HISTORIAL ── -->
+  <div class="view" id="view-historial">
+    <div class="section-label">Visitas de hoy</div>
+    <div id="log-list">
+      <div class="empty">
+        <div class="empty-icon">📋</div>
+        <h3>Sin registros hoy</h3>
+        <p>Los avisos enviados aparecerán aquí</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TAB: CONFIG ── -->
+  <div class="view" id="view-config">
+    <div class="section-label">Correos por área</div>
+    <div class="card" id="config-list">
+      <!-- populated by JS -->
+    </div>
+    <div style="margin-top: 8px;">
+      <button class="btn-save" onclick="openEmailModal()">✏️ Editar correos de las áreas</button>
+    </div>
+
+    <div class="section-label">Acerca de</div>
+    <div class="card">
+      <div class="config-row">
+        <div><div class="config-label">Versión</div></div>
+        <div class="config-email">1.0.0</div>
+      </div>
+      <div class="config-row">
+        <div><div class="config-label">Modo</div><div class="config-sub">Correo electrónico</div></div>
+        <div class="config-email">SMTP / mailto</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- TOAST -->
+<div class="success-toast" id="toast">✅ Aviso enviado correctamente</div>
+
+<!-- MODAL: EDITAR EMAILS -->
+<div class="modal-overlay" id="email-modal" onclick="closeEmailModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Correos de cada área</div>
+    <div id="modal-email-list"></div>
+    <button class="btn-save" onclick="saveEmails()">💾 Guardar correos</button>
+  </div>
+</div>
+
+<script>
+const AREAS = [
+  { id:'rh',          label:'Recursos Humanos',    emoji:'👥' },
+  { id:'seg_higiene', label:'Seguridad e Higiene',  emoji:'⚠️' },
+  { id:'compras',     label:'Compras',              emoji:'🛒' },
+  { id:'finanzas',    label:'Finanzas',             emoji:'💰' },
+  { id:'calidad',     label:'Calidad',              emoji:'✅' },
+  { id:'manufactura', label:'Manufactura',          emoji:'🏭' },
+  { id:'almacen',     label:'Almacén',              emoji:'📦' },
+  { id:'logistica',   label:'Logística',            emoji:'🚛' },
+  { id:'ti',          label:'Tecnologías',          emoji:'💻' },
+];
+
+// Load stored emails or use placeholders
+function getEmails() {
+  try {
+    const stored = JSON.parse(localStorage.getItem('area_emails') || '{}');
+    const result = {};
+    AREAS.forEach(a => { result[a.id] = stored[a.id] || ''; });
+    return result;
+  } catch(e) { return {}; }
+}
+
+function saveEmailsToStorage(emails) {
+  localStorage.setItem('area_emails', JSON.stringify(emails));
+}
+
+function getLog() {
+  try { return JSON.parse(localStorage.getItem('visit_log') || '[]'); } catch(e) { return []; }
+}
+
+function saveLog(log) {
+  localStorage.setItem('visit_log', JSON.stringify(log));
+}
+
+let selectedArea = null;
+
+// ── INIT ──
+function init() {
+  renderAreaGrid();
+  renderConfigList();
+  renderLog();
+  updateBadge();
+
+  document.getElementById('motivo').addEventListener('change', function() {
+    document.getElementById('otro-group').style.display = this.value === 'Otro' ? 'block' : 'none';
+  });
+}
+
+function renderAreaGrid() {
+  const grid = document.getElementById('area-grid');
+  grid.innerHTML = AREAS.map(a => `
+    <button class="area-btn" id="area-${a.id}" onclick="selectArea('${a.id}')">
+      <span class="area-emoji">${a.emoji}</span>
+      <span>${a.label}</span>
+    </button>
+  `).join('');
+}
+
+function selectArea(id) {
+  selectedArea = id;
+  AREAS.forEach(a => {
+    document.getElementById('area-' + a.id).classList.toggle('selected', a.id === id);
+  });
+}
+
+function renderConfigList() {
+  const emails = getEmails();
+  const list = document.getElementById('config-list');
+  list.innerHTML = AREAS.map(a => `
+    <div class="config-row">
+      <div>
+        <div class="config-label">${a.emoji} ${a.label}</div>
+      </div>
+      <div class="config-email">${emails[a.id] || '<span style="color:#94a3b8;font-size:12px">Sin correo</span>'}</div>
+    </div>
+  `).join('');
+}
+
+function renderLog() {
+  const log = getLog();
+  const today = new Date().toLocaleDateString('es-MX');
+  const todayLog = log.filter(e => e.fecha === today).reverse();
+  const list = document.getElementById('log-list');
+
+  if (!todayLog.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><h3>Sin registros hoy</h3><p>Los avisos enviados aparecerán aquí</p></div>`;
+    return;
+  }
+  list.innerHTML = todayLog.map(e => `
+    <div class="log-item">
+      <div class="log-dot ${e.enviado ? '' : 'pending'}"></div>
+      <div style="flex:1">
+        <div class="log-name">${e.empresa} — ${e.visitante}</div>
+        <div class="log-meta">${e.motivo} · ${e.hora}</div>
+        <div class="log-area">${AREAS.find(a=>a.id===e.area)?.emoji || ''} ${AREAS.find(a=>a.id===e.area)?.label || e.area}</div>
+        ${e.obs ? `<div style="font-size:12px;color:var(--text-muted);margin-top:4px">${e.obs}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateBadge() {
+  const log = getLog();
+  const today = new Date().toLocaleDateString('es-MX');
+  const count = log.filter(e => e.fecha === today).length;
+  document.getElementById('badge-count').textContent = count;
+}
+
+// ── ENVIAR AVISO ──
+function enviarAviso() {
+  const empresa = document.getElementById('empresa').value.trim();
+  const visitante = document.getElementById('visitante').value.trim();
+  const motivoEl = document.getElementById('motivo');
+  let motivo = motivoEl.value;
+  if (motivo === 'Otro') motivo = document.getElementById('otro-motivo').value.trim() || 'Otro';
+  const obs = document.getElementById('obs').value.trim();
+
+  if (!empresa) { alert('Por favor ingresa el nombre de la empresa.'); return; }
+  if (!visitante) { alert('Por favor ingresa el nombre del visitante.'); return; }
+  if (!motivo) { alert('Por favor selecciona el motivo de visita.'); return; }
+  if (!selectedArea) { alert('Por favor selecciona el área a notificar.'); return; }
+
+  const area = AREAS.find(a => a.id === selectedArea);
+  const emails = getEmails();
+  const emailDestino = emails[selectedArea];
+
+  const ahora = new Date();
+  const hora = ahora.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+  const fecha = ahora.toLocaleDateString('es-MX');
+
+  const asunto = encodeURIComponent(`[VISITA] ${empresa} solicita atención - ${area.label}`);
+  const cuerpo = encodeURIComponent(
+`AVISO DE VISITA - Guardia de Seguridad
+======================================
+Área notificada: ${area.emoji} ${area.label}
+Fecha y hora: ${fecha} ${hora}
+
+DATOS DEL VISITANTE
+Empresa: ${empresa}
+Nombre: ${visitante}
+Motivo: ${motivo}
+${obs ? `Observaciones: ${obs}` : ''}
+
+Este aviso fue enviado desde la caseta de seguridad.`
+  );
+
+  // Log the entry
+  const entry = {
+    id: Date.now(),
+    empresa, visitante, motivo, obs,
+    area: selectedArea,
+    hora, fecha,
+    enviado: !!emailDestino
+  };
+  const log = getLog();
+  log.push(entry);
+  saveLog(log);
+  renderLog();
+  updateBadge();
+
+  if (emailDestino) {
+    window.location.href = `mailto:${emailDestino}?subject=${asunto}&body=${cuerpo}`;
+    showToast(`📧 Enviando aviso a ${area.label}`);
+  } else {
+    // Open mail client with empty To so user can fill
+    window.location.href = `mailto:?subject=${asunto}&body=${cuerpo}`;
+    showToast(`⚠️ Configura el correo de ${area.label}`, true);
+  }
+
+  // Reset form
+  setTimeout(() => {
+    document.getElementById('empresa').value = '';
+    document.getElementById('visitante').value = '';
+    document.getElementById('motivo').value = '';
+    document.getElementById('obs').value = '';
+    document.getElementById('otro-group').style.display = 'none';
+    selectedArea = null;
+    renderAreaGrid();
+  }, 800);
+}
+
+// ── TOAST ──
+function showToast(msg, warn = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = warn ? '#f59e0b' : 'var(--success)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── TABS ──
+function switchTab(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  event.target.closest('.tab-btn').classList.add('active');
+  if (name === 'historial') renderLog();
+  if (name === 'config') renderConfigList();
+}
+
+// ── EMAIL MODAL ──
+function openEmailModal() {
+  const emails = getEmails();
+  document.getElementById('modal-email-list').innerHTML = AREAS.map(a => `
+    <div class="email-item">
+      <span style="font-size:14px;font-weight:500;white-space:nowrap">${a.emoji} ${a.label}</span>
+      <input type="email" id="modal-email-${a.id}" value="${emails[a.id] || ''}" placeholder="correo@empresa.com">
+    </div>
+  `).join('');
+  document.getElementById('email-modal').classList.add('open');
+}
+
+function closeEmailModal(e) {
+  if (e.target.id === 'email-modal') {
+    document.getElementById('email-modal').classList.remove('open');
+  }
+}
+
+function saveEmails() {
+  const emails = {};
+  AREAS.forEach(a => {
+    emails[a.id] = document.getElementById('modal-email-' + a.id).value.trim();
+  });
+  saveEmailsToStorage(emails);
+  document.getElementById('email-modal').classList.remove('open');
+  renderConfigList();
+  showToast('💾 Correos guardados');
+}
+
+// ── SERVICE WORKER ──
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+init();
+</script>
+</body>
+</html>
