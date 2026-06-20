@@ -792,7 +792,7 @@ function saveLog(log) { localStorage.setItem('visit_log', JSON.stringify(log)); 
 // ⚠️ INTERRUPTOR MANUAL DE VIGENCIA — edítalo aquí mismo en el código
 // true  = ignora cualquier fecha guardada y la app SIEMPRE entra sin bloqueo
 // false = respeta la fecha que el administrador configuró desde el panel
-const FORZAR_SIN_VIGENCIA = true;
+const FORZAR_SIN_VIGENCIA = false;
 
 function getVigencia() {
   if (FORZAR_SIN_VIGENCIA) return '';
