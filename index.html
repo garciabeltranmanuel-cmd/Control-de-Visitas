@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Guardia">
   <meta name="theme-color" content="#1e3a5f">
-  <title>Control de Visitas</title>
+  <title>Control de Visitas - KINGFA MEXICO</title>
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <style>
@@ -37,7 +37,126 @@
       min-height: 100dvh;
     }
 
-    /* HEADER */
+    /* ══════════ SPLASH / PORTADA QR ══════════ */
+    .splash {
+      position: fixed; inset: 0;
+      background: linear-gradient(160deg, var(--navy-dark) 0%, var(--navy) 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 500;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .splash-logo {
+      width: 76px; height: 76px;
+      background: var(--accent);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 38px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .splash h1 { color: white; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 4px; }
+    .splash .splash-company { color: var(--accent); font-size: 15px; font-weight: 700; letter-spacing: 1px; margin-bottom: 28px; }
+    .splash-qr-box {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+      margin-bottom: 24px;
+    }
+    .splash-qr-box img { width: 200px; height: 200px; display: block; }
+    .splash-hint { color: rgba(255,255,255,0.6); font-size: 13px; max-width: 280px; line-height: 1.5; margin-bottom: 28px; }
+    .splash-enter {
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      color: white;
+      font-size: 14px; font-weight: 600;
+      padding: 13px 28px;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+    .splash-enter:active { background: rgba(255,255,255,0.18); }
+
+    /* ══════════ PANTALLA BLOQUEADA (vigencia vencida) ══════════ */
+    .locked-screen {
+      position: fixed; inset: 0;
+      background: linear-gradient(160deg, var(--navy-dark) 0%, #3a1212 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 600;
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .locked-icon { font-size: 56px; margin-bottom: 18px; }
+    .locked-screen h2 { color: white; font-size: 19px; font-weight: 700; margin-bottom: 8px; }
+    .locked-screen p { color: rgba(255,255,255,0.65); font-size: 14px; max-width: 280px; line-height: 1.5; margin-bottom: 24px; }
+    .locked-date { background: rgba(239,68,68,0.2); color: #fca5a5; padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-bottom: 28px; }
+    .locked-admin-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      color: white;
+      font-size: 13px; font-weight: 600;
+      padding: 11px 24px;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+
+    /* ══════════ LOGIN ADMIN (PIN) ══════════ */
+    .pin-screen {
+      position: fixed; inset: 0;
+      background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 550;
+      padding: 24px;
+    }
+    .pin-back {
+      position: absolute; top: 20px; left: 16px;
+      background: none; border: none; color: var(--text-muted);
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      padding: 8px 12px;
+    }
+    .pin-icon {
+      width: 56px; height: 56px;
+      background: var(--navy);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .pin-screen h2 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .pin-screen p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+    .pin-dots { display: flex; gap: 14px; margin-bottom: 24px; }
+    .pin-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      transition: all 0.15s;
+    }
+    .pin-dot.filled { background: var(--navy); border-color: var(--navy); }
+    .pin-dot.error { background: var(--danger); border-color: var(--danger); animation: shake 0.3s; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+    .pin-keypad {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      width: 100%;
+      max-width: 260px;
+    }
+    .pin-key {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: white;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pin-key:active { background: var(--bg); transform: scale(0.95); }
+    .pin-key.empty { border: none; background: none; cursor: default; }
+    .pin-key.del { font-size: 16px; color: var(--text-muted); }
+
+    /* ══════════ HEADER ══════════ */
     .header {
       background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%);
       color: white;
@@ -75,7 +194,9 @@
       padding: 3px 8px;
       border-radius: 20px;
       display: flex; align-items: center; gap: 5px;
+      cursor: pointer;
     }
+    .badge-live.admin-mode { background: var(--accent); }
     .dot-live {
       width: 7px; height: 7px;
       background: white;
@@ -84,7 +205,7 @@
     }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-    /* TABS */
+    /* ══════════ TABS ══════════ */
     .tabs {
       display: flex;
       background: white;
@@ -92,6 +213,7 @@
       position: sticky;
       top: 84px;
       z-index: 99;
+      overflow-x: auto;
     }
     .tab-btn {
       flex: 1;
@@ -104,17 +226,16 @@
       cursor: pointer;
       border-bottom: 3px solid transparent;
       transition: all 0.2s;
+      white-space: nowrap;
     }
     .tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
 
-    /* CONTENT */
+    /* ══════════ CONTENT ══════════ */
     .content { padding: 16px; max-width: 520px; margin: 0 auto; }
 
-    /* SCREEN VIEWS */
     .view { display: none; }
     .view.active { display: block; }
 
-    /* SECTION LABEL */
     .section-label {
       font-size: 11px;
       font-weight: 700;
@@ -125,7 +246,6 @@
     }
     .section-label:first-child { margin-top: 0; }
 
-    /* CARD */
     .card {
       background: var(--surface);
       border-radius: 14px;
@@ -210,7 +330,7 @@
     .btn-send:active { transform: scale(0.97); }
     .btn-send:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; }
 
-    /* SUCCESS FLASH */
+    /* TOAST */
     .success-toast {
       position: fixed;
       top: 20px; left: 50%;
@@ -224,6 +344,8 @@
       transition: transform 0.3s ease;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
       white-space: nowrap;
+      max-width: 90vw;
+      text-align: center;
     }
     .success-toast.show { transform: translateX(-50%) translateY(0); }
 
@@ -254,7 +376,7 @@
       display: inline-block; margin-top: 4px;
     }
 
-    /* CONFIG */
+    /* CONFIG ROWS */
     .config-row {
       display: flex; align-items: center;
       justify-content: space-between;
@@ -336,8 +458,32 @@
       border-radius: 12px;
       cursor: pointer;
     }
+    .btn-outline {
+      width: 100%;
+      padding: 14px;
+      background: white;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 600;
+      border: 1.5px solid var(--navy);
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-danger-outline {
+      width: 100%;
+      padding: 12px;
+      background: white;
+      color: var(--danger);
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid #fca5a5;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
 
-    /* COUNTER BADGE */
+    /* TAB BADGE */
     .tab-badge {
       display: inline-flex; align-items: center; justify-content: center;
       background: var(--accent);
@@ -349,120 +495,232 @@
       margin-left: 4px;
       min-width: 16px; height: 16px;
     }
+
+    /* ══════════ ADMIN: VIGENCIA ══════════ */
+    .vigencia-status {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+    }
+    .vigencia-status.ok { background: #e9f9ee; }
+    .vigencia-status.warn { background: #fff7e6; }
+    .vigencia-status.expired { background: #fdecec; }
+    .vigencia-icon { font-size: 26px; }
+    .vigencia-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .vigencia-status.ok h4 { color: #15803d; }
+    .vigencia-status.warn h4 { color: #b45309; }
+    .vigencia-status.expired h4 { color: #b91c1c; }
+    .vigencia-text p { font-size: 12px; color: var(--text-muted); }
+
+    /* ══════════ ADMIN: COLOR PICKER ══════════ */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .color-swatch {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      position: relative;
+    }
+    .color-swatch.selected { border-color: var(--text); }
+    .color-swatch.selected::after {
+      content: '✓';
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 14px; font-weight: 700;
+    }
+
+    .admin-section-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .logout-row {
+      padding: 14px 0 0;
+    }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-top">
-    <div class="header-logo">
-      <div class="logo-icon">🛡️</div>
-      <div>
-        <h1>Control de Visitas</h1>
-        <p>Caseta de seguridad</p>
-      </div>
-    </div>
-    <div class="badge-live"><div class="dot-live"></div>EN LÍNEA</div>
+<!-- ══════════ SPLASH: PORTADA CON QR ══════════ -->
+<div class="splash" id="splash-screen">
+  <div class="splash-logo">🛡️</div>
+  <h1>Control de Visitas</h1>
+  <div class="splash-company">KINGFA MEXICO</div>
+  <div class="splash-qr-box">
+    <img src="icons/qr-acceso.png" alt="Código QR de acceso" id="splash-qr-img">
   </div>
+  <p class="splash-hint">Escanea este código desde tu celular para abrir el sistema, o continúa aquí mismo.</p>
+  <button class="splash-enter" onclick="enterApp()">Entrar al sistema →</button>
 </div>
 
-<!-- TABS -->
-<div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('aviso')">📣 Avisar</button>
-  <button class="tab-btn" onclick="switchTab('historial')">📋 Historial <span class="tab-badge" id="badge-count">0</span></button>
-  <button class="tab-btn" onclick="switchTab('config')">⚙️ Config</button>
+<!-- ══════════ PANTALLA BLOQUEADA POR VIGENCIA ══════════ -->
+<div class="locked-screen" id="locked-screen" style="display:none">
+  <div class="locked-icon">🔒</div>
+  <h2>Programa fuera de vigencia</h2>
+  <p>La vigencia de este sistema ha terminado. Contacta al administrador para reactivarlo.</p>
+  <div class="locked-date" id="locked-date-text"></div>
+  <button class="locked-admin-btn" onclick="showPinScreen()">Acceso de administrador</button>
 </div>
 
-<!-- CONTENT -->
-<div class="content">
-
-  <!-- ── TAB: AVISAR ── -->
-  <div class="view active" id="view-aviso">
-
-    <div class="section-label">Datos del proveedor / visitante</div>
-    <div class="card">
-      <div class="form-group">
-        <label>Nombre de la empresa</label>
-        <input type="text" id="empresa" placeholder="Ej. CEMEX, DHL, etc." autocomplete="off">
-      </div>
-      <div class="form-group">
-        <label>Nombre del visitante</label>
-        <input type="text" id="visitante" placeholder="Nombre completo" autocomplete="off">
-      </div>
-      <div class="form-group">
-        <label>Motivo de visita</label>
-        <select id="motivo">
-          <option value="">— Seleccionar —</option>
-          <option>Entrega de mercancía</option>
-          <option>Servicio de mantenimiento</option>
-          <option>Reunión / cita programada</option>
-          <option>Auditoría / revisión</option>
-          <option>Entrega de documentos</option>
-          <option>Otro</option>
-        </select>
-      </div>
-      <div class="form-group" id="otro-group" style="display:none">
-        <label>Especificar motivo</label>
-        <input type="text" id="otro-motivo" placeholder="Describe el motivo">
-      </div>
-    </div>
-
-    <div class="section-label">¿A qué área va dirigido?</div>
-    <div class="area-grid" id="area-grid">
-      <!-- populated by JS -->
-    </div>
-
-    <div class="form-group">
-      <label>Observaciones (opcional)</label>
-      <textarea id="obs" placeholder="Placas, número de empleado, urgente, etc."></textarea>
-    </div>
-
-    <button class="btn-send" id="btn-enviar" onclick="enviarAviso()">
-      🔔 AVISAR AL ÁREA
-    </button>
-
-    <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:12px;">
-      Se enviará un correo de notificación al área seleccionada
-    </p>
+<!-- ══════════ LOGIN PIN ADMINISTRADOR ══════════ -->
+<div class="pin-screen" id="pin-screen" style="display:none">
+  <button class="pin-back" onclick="hidePinScreen()">← Volver</button>
+  <div class="pin-icon">🔑</div>
+  <h2>Acceso administrador</h2>
+  <p>Ingresa el PIN de 4 dígitos</p>
+  <div class="pin-dots" id="pin-dots">
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
+    <div class="pin-dot"></div>
   </div>
+  <div class="pin-keypad" id="pin-keypad"></div>
+</div>
 
-  <!-- ── TAB: HISTORIAL ── -->
-  <div class="view" id="view-historial">
-    <div class="section-label">Visitas de hoy</div>
-    <div id="log-list">
-      <div class="empty">
-        <div class="empty-icon">📋</div>
-        <h3>Sin registros hoy</h3>
-        <p>Los avisos enviados aparecerán aquí</p>
+<!-- ══════════ APP PRINCIPAL ══════════ -->
+<div id="main-app" style="display:none">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="header-logo">
+        <div class="logo-icon">🛡️</div>
+        <div>
+          <h1>Control de Visitas</h1>
+          <p>KINGFA MEXICO · Caseta de seguridad</p>
+        </div>
+      </div>
+      <div class="badge-live" id="mode-badge" onclick="handleModeBadgeClick()">
+        <div class="dot-live"></div><span id="mode-badge-text">EN LÍNEA</span>
       </div>
     </div>
   </div>
 
-  <!-- ── TAB: CONFIG ── -->
-  <div class="view" id="view-config">
-    <div class="section-label">Correos por área</div>
-    <div class="card" id="config-list">
-      <!-- populated by JS -->
-    </div>
-    <div style="margin-top: 8px;">
-      <button class="btn-save" onclick="openEmailModal()">✏️ Editar correos de las áreas</button>
-    </div>
-
-    <div class="section-label">Acerca de</div>
-    <div class="card">
-      <div class="config-row">
-        <div><div class="config-label">Versión</div></div>
-        <div class="config-email">1.0.0</div>
-      </div>
-      <div class="config-row">
-        <div><div class="config-label">Modo</div><div class="config-sub">Correo electrónico</div></div>
-        <div class="config-email">SMTP / mailto</div>
-      </div>
-    </div>
+  <div class="tabs" id="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('aviso')">📣 Avisar</button>
+    <button class="tab-btn" onclick="switchTab('historial')">📋 Historial <span class="tab-badge" id="badge-count">0</span></button>
+    <button class="tab-btn" id="tab-admin-btn" onclick="switchTab('admin')" style="display:none">⚙️ Administrador</button>
   </div>
 
-</div><!-- /content -->
+  <div class="content">
+
+    <!-- ── TAB: AVISAR ── -->
+    <div class="view active" id="view-aviso">
+
+      <div class="section-label">Datos del proveedor / visitante</div>
+      <div class="card">
+        <div class="form-group">
+          <label>Nombre de la empresa</label>
+          <input type="text" id="empresa" placeholder="Ej. CEMEX, DHL, etc." autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Nombre del visitante</label>
+          <input type="text" id="visitante" placeholder="Nombre completo" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>Motivo de visita</label>
+          <select id="motivo">
+            <option value="">— Seleccionar —</option>
+            <option>Entrega de mercancía</option>
+            <option>Servicio de mantenimiento</option>
+            <option>Reunión / cita programada</option>
+            <option>Auditoría / revisión</option>
+            <option>Entrega de documentos</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group" id="otro-group" style="display:none">
+          <label>Especificar motivo</label>
+          <input type="text" id="otro-motivo" placeholder="Describe el motivo">
+        </div>
+      </div>
+
+      <div class="section-label">¿A qué área va dirigido?</div>
+      <div class="area-grid" id="area-grid"></div>
+
+      <div class="form-group">
+        <label>Observaciones (opcional)</label>
+        <textarea id="obs" placeholder="Placas, número de empleado, urgente, etc."></textarea>
+      </div>
+
+      <button class="btn-send" id="btn-enviar" onclick="enviarAviso()">
+        🔔 AVISAR AL ÁREA
+      </button>
+
+      <p style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:12px;">
+        Se enviará un correo de notificación al área seleccionada
+      </p>
+    </div>
+
+    <!-- ── TAB: HISTORIAL ── -->
+    <div class="view" id="view-historial">
+      <div class="section-label">Visitas de hoy</div>
+      <div id="log-list">
+        <div class="empty">
+          <div class="empty-icon">📋</div>
+          <h3>Sin registros hoy</h3>
+          <p>Los avisos enviados aparecerán aquí</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TAB: ADMINISTRADOR ── -->
+    <div class="view" id="view-admin">
+
+      <div class="section-label">Vigencia del programa</div>
+      <div class="card">
+        <div class="vigencia-status" id="vigencia-status-box">
+          <div class="vigencia-icon" id="vigencia-icon">✅</div>
+          <div class="vigencia-text">
+            <h4 id="vigencia-titulo">Programa activo</h4>
+            <p id="vigencia-sub">Sin fecha límite configurada</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Fecha de vencimiento</label>
+          <input type="date" id="vigencia-fecha">
+        </div>
+        <button class="btn-save" onclick="saveVigencia()">💾 Guardar vigencia</button>
+        <button class="btn-danger-outline" onclick="clearVigencia()">Quitar fecha límite</button>
+      </div>
+
+      <div class="section-label">Correos por área</div>
+      <div class="card" id="config-list"></div>
+      <button class="btn-outline" onclick="openEmailModal()">✏️ Editar correos de las áreas</button>
+
+      <div class="section-label">Color del sistema</div>
+      <div class="card">
+        <div class="color-grid" id="color-grid"></div>
+        <p style="font-size:12px; color:var(--text-muted)">Este color se usa en encabezado y botón principal.</p>
+      </div>
+
+      <div class="section-label">Sesión</div>
+      <div class="card logout-row">
+        <button class="btn-danger-outline" onclick="logoutAdmin()" style="margin-top:0">🚪 Cerrar sesión de administrador</button>
+      </div>
+
+      <div class="section-label">Acerca de</div>
+      <div class="card">
+        <div class="config-row">
+          <div><div class="config-label">Versión</div></div>
+          <div class="config-email">2.0.0</div>
+        </div>
+        <div class="config-row">
+          <div><div class="config-label">Modo</div><div class="config-sub">Correo electrónico</div></div>
+          <div class="config-email">SMTP / mailto</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+</div><!-- /main-app -->
 
 <!-- TOAST -->
 <div class="success-toast" id="toast">✅ Aviso enviado correctamente</div>
@@ -478,6 +736,11 @@
 </div>
 
 <script>
+/* ════════════════════════════════════════════
+   CONFIGURACIÓN FIJA — Solo editable en el código fuente
+   ════════════════════════════════════════════ */
+const ADMIN_PIN = '2580'; // ← Cambia este PIN antes de publicar
+
 const AREAS = [
   { id:'rh',          label:'Recursos Humanos',    emoji:'👥' },
   { id:'seg_higiene', label:'Seguridad e Higiene',  emoji:'⚠️' },
@@ -490,7 +753,26 @@ const AREAS = [
   { id:'ti',          label:'Tecnologías',          emoji:'💻' },
 ];
 
-// Load stored emails or use placeholders
+const COLOR_OPTIONS = [
+  '#f97316', // naranja (default)
+  '#ef4444', // rojo
+  '#22c55e', // verde
+  '#3b82f6', // azul
+  '#a855f7', // morado
+  '#06b6d4', // cyan
+  '#eab308', // amarillo
+  '#ec4899', // rosa
+  '#14b8a6', // teal
+  '#64748b', // gris
+  '#dc2626', // rojo fuerte
+  '#0ea5e9', // celeste
+];
+
+let selectedArea = null;
+let isAdmin = false;
+let pinBuffer = '';
+
+/* ── STORAGE HELPERS ── */
 function getEmails() {
   try {
     const stored = JSON.parse(localStorage.getItem('area_emails') || '{}');
@@ -499,33 +781,231 @@ function getEmails() {
     return result;
   } catch(e) { return {}; }
 }
-
-function saveEmailsToStorage(emails) {
-  localStorage.setItem('area_emails', JSON.stringify(emails));
-}
+function saveEmailsToStorage(emails) { localStorage.setItem('area_emails', JSON.stringify(emails)); }
 
 function getLog() {
   try { return JSON.parse(localStorage.getItem('visit_log') || '[]'); } catch(e) { return []; }
 }
+function saveLog(log) { localStorage.setItem('visit_log', JSON.stringify(log)); }
 
-function saveLog(log) {
-  localStorage.setItem('visit_log', JSON.stringify(log));
+function getVigencia() {
+  return localStorage.getItem('vigencia_fecha') || '';
+}
+function setVigenciaStorage(fecha) {
+  if (fecha) localStorage.setItem('vigencia_fecha', fecha);
+  else localStorage.removeItem('vigencia_fecha');
 }
 
-let selectedArea = null;
+function getAccentColor() {
+  return localStorage.getItem('accent_color') || '#f97316';
+}
+function setAccentColorStorage(color) { localStorage.setItem('accent_color', color); }
 
-// ── INIT ──
+/* ── ENTRY POINT: detect QR direct entry vs splash ── */
 function init() {
+  applyAccentColor();
   renderAreaGrid();
   renderConfigList();
   renderLog();
   updateBadge();
+  buildPinKeypad();
+  renderColorGrid();
 
   document.getElementById('motivo').addEventListener('change', function() {
     document.getElementById('otro-group').style.display = this.value === 'Otro' ? 'block' : 'none';
   });
+
+  // If URL has ?entrar=1 (from QR scan), skip splash and go straight in
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('entrar') === '1') {
+    checkVigenciaAndEnter();
+  }
 }
 
+function enterApp() {
+  checkVigenciaAndEnter();
+}
+
+function checkVigenciaAndEnter() {
+  const fecha = getVigencia();
+  if (fecha) {
+    const hoy = new Date(); hoy.setHours(0,0,0,0);
+    const limite = new Date(fecha + 'T00:00:00');
+    if (hoy > limite) {
+      showLockedScreen(fecha);
+      return;
+    }
+  }
+  document.getElementById('splash-screen').style.display = 'none';
+  document.getElementById('main-app').style.display = 'block';
+}
+
+function showLockedScreen(fecha) {
+  document.getElementById('splash-screen').style.display = 'none';
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('locked-screen').style.display = 'flex';
+  const d = new Date(fecha + 'T00:00:00');
+  document.getElementById('locked-date-text').textContent =
+    'Venció el ' + d.toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+}
+
+/* ── ACCENT COLOR ── */
+function applyAccentColor() {
+  const color = getAccentColor();
+  document.documentElement.style.setProperty('--accent', color);
+  document.documentElement.style.setProperty('--accent-dark', shadeColor(color, -15));
+}
+function shadeColor(hex, percent) {
+  let r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  r = Math.max(0, Math.min(255, r + Math.round(255 * percent / 100)));
+  g = Math.max(0, Math.min(255, g + Math.round(255 * percent / 100)));
+  b = Math.max(0, Math.min(255, b + Math.round(255 * percent / 100)));
+  return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+}
+function renderColorGrid() {
+  const current = getAccentColor();
+  const grid = document.getElementById('color-grid');
+  grid.innerHTML = COLOR_OPTIONS.map(c => `
+    <div class="color-swatch ${c === current ? 'selected' : ''}" style="background:${c}" onclick="pickColor('${c}')"></div>
+  `).join('');
+}
+function pickColor(color) {
+  setAccentColorStorage(color);
+  applyAccentColor();
+  renderColorGrid();
+  showToast('🎨 Color actualizado');
+}
+
+/* ── PIN / ADMIN LOGIN ── */
+function buildPinKeypad() {
+  const keys = ['1','2','3','4','5','6','7','8','9','','0','del'];
+  const kp = document.getElementById('pin-keypad');
+  kp.innerHTML = keys.map(k => {
+    if (k === '') return `<div class="pin-key empty"></div>`;
+    if (k === 'del') return `<button class="pin-key del" onclick="pinDelete()">⌫</button>`;
+    return `<button class="pin-key" onclick="pinPress('${k}')">${k}</button>`;
+  }).join('');
+}
+function showPinScreen() {
+  pinBuffer = '';
+  renderPinDots();
+  document.getElementById('pin-screen').style.display = 'flex';
+}
+function hidePinScreen() {
+  document.getElementById('pin-screen').style.display = 'none';
+}
+function pinPress(digit) {
+  if (pinBuffer.length >= 4) return;
+  pinBuffer += digit;
+  renderPinDots();
+  if (pinBuffer.length === 4) {
+    setTimeout(checkPin, 150);
+  }
+}
+function pinDelete() {
+  pinBuffer = pinBuffer.slice(0, -1);
+  renderPinDots();
+}
+function renderPinDots(errorState) {
+  const dots = document.querySelectorAll('.pin-dot');
+  dots.forEach((d, i) => {
+    d.classList.remove('filled', 'error');
+    if (errorState) d.classList.add('error');
+    else if (i < pinBuffer.length) d.classList.add('filled');
+  });
+}
+function checkPin() {
+  if (pinBuffer === ADMIN_PIN) {
+    isAdmin = true;
+    hidePinScreen();
+    enterAdminMode();
+  } else {
+    renderPinDots(true);
+    setTimeout(() => { pinBuffer = ''; renderPinDots(); }, 400);
+  }
+}
+function enterAdminMode() {
+  document.getElementById('tab-admin-btn').style.display = 'block';
+  const badge = document.getElementById('mode-badge');
+  badge.classList.add('admin-mode');
+  document.getElementById('mode-badge-text').textContent = 'ADMINISTRADOR';
+  switchTabByName('admin');
+  // If we entered from locked screen, re-evaluate access (admin can use app even if expired)
+  document.getElementById('locked-screen').style.display = 'none';
+  document.getElementById('main-app').style.display = 'block';
+  renderVigenciaStatus();
+  showToast('🔑 Modo administrador activado');
+}
+function logoutAdmin() {
+  isAdmin = false;
+  document.getElementById('tab-admin-btn').style.display = 'none';
+  const badge = document.getElementById('mode-badge');
+  badge.classList.remove('admin-mode');
+  document.getElementById('mode-badge-text').textContent = 'EN LÍNEA';
+  switchTabByName('aviso');
+  showToast('Sesión de administrador cerrada');
+  // Re-check vigencia in case it's expired, to lock again for guard use
+  checkVigenciaAndEnter();
+}
+function handleModeBadgeClick() {
+  if (!isAdmin) showPinScreen();
+}
+
+/* ── VIGENCIA ── */
+function renderVigenciaStatus() {
+  const fecha = getVigencia();
+  document.getElementById('vigencia-fecha').value = fecha;
+  const box = document.getElementById('vigencia-status-box');
+  const icon = document.getElementById('vigencia-icon');
+  const titulo = document.getElementById('vigencia-titulo');
+  const sub = document.getElementById('vigencia-sub');
+
+  box.classList.remove('ok', 'warn', 'expired');
+
+  if (!fecha) {
+    box.classList.add('ok');
+    icon.textContent = '✅';
+    titulo.textContent = 'Programa activo';
+    sub.textContent = 'Sin fecha límite configurada';
+    return;
+  }
+
+  const hoy = new Date(); hoy.setHours(0,0,0,0);
+  const limite = new Date(fecha + 'T00:00:00');
+  const diffDias = Math.round((limite - hoy) / 86400000);
+  const fechaStr = limite.toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+
+  if (diffDias < 0) {
+    box.classList.add('expired');
+    icon.textContent = '🔒';
+    titulo.textContent = 'Vigencia vencida';
+    sub.textContent = 'Venció el ' + fechaStr;
+  } else if (diffDias <= 7) {
+    box.classList.add('warn');
+    icon.textContent = '⏳';
+    titulo.textContent = 'Por vencer en ' + diffDias + ' día(s)';
+    sub.textContent = 'Vence el ' + fechaStr;
+  } else {
+    box.classList.add('ok');
+    icon.textContent = '✅';
+    titulo.textContent = 'Programa activo';
+    sub.textContent = 'Vence el ' + fechaStr;
+  }
+}
+function saveVigencia() {
+  const fecha = document.getElementById('vigencia-fecha').value;
+  if (!fecha) { alert('Selecciona una fecha de vencimiento.'); return; }
+  setVigenciaStorage(fecha);
+  renderVigenciaStatus();
+  showToast('💾 Vigencia actualizada');
+}
+function clearVigencia() {
+  setVigenciaStorage('');
+  renderVigenciaStatus();
+  showToast('Fecha límite eliminada');
+}
+
+/* ── AREA GRID ── */
 function renderAreaGrid() {
   const grid = document.getElementById('area-grid');
   grid.innerHTML = AREAS.map(a => `
@@ -535,7 +1015,6 @@ function renderAreaGrid() {
     </button>
   `).join('');
 }
-
 function selectArea(id) {
   selectedArea = id;
   AREAS.forEach(a => {
@@ -543,19 +1022,19 @@ function selectArea(id) {
   });
 }
 
+/* ── CONFIG LIST (read-only summary inside admin) ── */
 function renderConfigList() {
   const emails = getEmails();
   const list = document.getElementById('config-list');
   list.innerHTML = AREAS.map(a => `
     <div class="config-row">
-      <div>
-        <div class="config-label">${a.emoji} ${a.label}</div>
-      </div>
+      <div><div class="config-label">${a.emoji} ${a.label}</div></div>
       <div class="config-email">${emails[a.id] || '<span style="color:#94a3b8;font-size:12px">Sin correo</span>'}</div>
     </div>
   `).join('');
 }
 
+/* ── HISTORIAL ── */
 function renderLog() {
   const log = getLog();
   const today = new Date().toLocaleDateString('es-MX');
@@ -578,7 +1057,6 @@ function renderLog() {
     </div>
   `).join('');
 }
-
 function updateBadge() {
   const log = getLog();
   const today = new Date().toLocaleDateString('es-MX');
@@ -586,7 +1064,7 @@ function updateBadge() {
   document.getElementById('badge-count').textContent = count;
 }
 
-// ── ENVIAR AVISO ──
+/* ── ENVIAR AVISO ── */
 function enviarAviso() {
   const empresa = document.getElementById('empresa').value.trim();
   const visitante = document.getElementById('visitante').value.trim();
@@ -621,10 +1099,9 @@ Nombre: ${visitante}
 Motivo: ${motivo}
 ${obs ? `Observaciones: ${obs}` : ''}
 
-Este aviso fue enviado desde la caseta de seguridad.`
+Este aviso fue enviado desde la caseta de seguridad - KINGFA MEXICO.`
   );
 
-  // Log the entry
   const entry = {
     id: Date.now(),
     empresa, visitante, motivo, obs,
@@ -642,12 +1119,10 @@ Este aviso fue enviado desde la caseta de seguridad.`
     window.location.href = `mailto:${emailDestino}?subject=${asunto}&body=${cuerpo}`;
     showToast(`📧 Enviando aviso a ${area.label}`);
   } else {
-    // Open mail client with empty To so user can fill
     window.location.href = `mailto:?subject=${asunto}&body=${cuerpo}`;
     showToast(`⚠️ Configura el correo de ${area.label}`, true);
   }
 
-  // Reset form
   setTimeout(() => {
     document.getElementById('empresa').value = '';
     document.getElementById('visitante').value = '';
@@ -659,7 +1134,7 @@ Este aviso fue enviado desde la caseta de seguridad.`
   }, 800);
 }
 
-// ── TOAST ──
+/* ── TOAST ── */
 function showToast(msg, warn = false) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -668,17 +1143,22 @@ function showToast(msg, warn = false) {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// ── TABS ──
+/* ── TABS ── */
 function switchTab(name) {
+  switchTabByName(name);
+}
+function switchTabByName(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('view-' + name).classList.add('active');
-  event.target.closest('.tab-btn').classList.add('active');
+  const btnMap = { aviso: 0, historial: 1, admin: 2 };
+  const btns = document.querySelectorAll('.tab-btn');
+  if (btns[btnMap[name]]) btns[btnMap[name]].classList.add('active');
   if (name === 'historial') renderLog();
-  if (name === 'config') renderConfigList();
+  if (name === 'admin') { renderConfigList(); renderVigenciaStatus(); renderColorGrid(); }
 }
 
-// ── EMAIL MODAL ──
+/* ── EMAIL MODAL ── */
 function openEmailModal() {
   const emails = getEmails();
   document.getElementById('modal-email-list').innerHTML = AREAS.map(a => `
@@ -689,13 +1169,11 @@ function openEmailModal() {
   `).join('');
   document.getElementById('email-modal').classList.add('open');
 }
-
 function closeEmailModal(e) {
   if (e.target.id === 'email-modal') {
     document.getElementById('email-modal').classList.remove('open');
   }
 }
-
 function saveEmails() {
   const emails = {};
   AREAS.forEach(a => {
@@ -707,7 +1185,7 @@ function saveEmails() {
   showToast('💾 Correos guardados');
 }
 
-// ── SERVICE WORKER ──
+/* ── SERVICE WORKER ── */
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
