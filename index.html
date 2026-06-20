@@ -105,7 +105,7 @@
       position: fixed; inset: 0;
       background: var(--bg);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      z-index: 550;
+      z-index: 700;
       padding: 24px;
     }
     .pin-back {
@@ -736,9 +736,9 @@
 </div>
 
 <script>
-/* ════════════════════════════════════════════
+/* 8387rcPNz8SRX6pYXgdxCZg3VMLFwtdJB3Z9LeX8Ge2n
    CONFIGURACIÓN FIJA — Solo editable en el código fuente
-   ════════════════════════════════════════════ */
+   8387rcPNz8SRX6pYXgdxCZg3VMLFwtdJB3Z9LeX8Ge2n */
 const ADMIN_PIN = '2580'; // ← Cambia este PIN antes de publicar
 
 const AREAS = [
@@ -788,7 +788,13 @@ function getLog() {
 }
 function saveLog(log) { localStorage.setItem('visit_log', JSON.stringify(log)); }
 
+// ⚠️ INTERRUPTOR MANUAL DE VIGENCIA — edítalo aquí mismo en el código
+// true  = ignora cualquier fecha guardada y la app SIEMPRE entra sin bloqueo
+// false = respeta la fecha que el administrador configuró desde el panel
+const FORZAR_SIN_VIGENCIA = true;
+
 function getVigencia() {
+  if (FORZAR_SIN_VIGENCIA) return '';
   return localStorage.getItem('vigencia_fecha') || '';
 }
 function setVigenciaStorage(fecha) {
